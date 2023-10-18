@@ -1,33 +1,31 @@
 <script setup>
-import {useProduct} from '@/store/useProductStore'
-import { storeToRefs } from 'pinia';
-const { id } = useRoute().params;
-const router = useRouter()
-const useProductStore = useProduct()
-const {productCartItems, quantity} = storeToRefs(useProductStore)
 
-definePageMeta({
-  layout: 'default',
-});
+  import { useProduct } from '@/store/useProductStore'
+  import { storeToRefs } from 'pinia';
+  const { id } = useRoute().params;
+  const router = useRouter()
+  const useProductStore = useProduct()
+  const {productCartItems, quantity} = storeToRefs(useProductStore)
 
-let url = `https://fakestoreapi.com/products/${id}`;
-const { data: single } = await useFetch(url);
+  definePageMeta({
+    layout: 'default',
+  });
 
-useHead({
-  title: ()=> `${single.value.title} | Dojo`,
-});
+  let url = `https://fakestoreapi.com/products/${id}`;
+  const { data: single } = await useFetch(url);
 
-const backToProductPage = ()=>{
-    router.back()
-}
+  useHead({
+    title: ()=> `${single.value.title} | Dojo`,
+  });
 
+  const backToProductPage = ()=>{
+      router.back()
+  }
 
 </script>
 
 <template>
   <div>
-
-    <h1>Carts: {{ productCartItems }}</h1>
 
     <div class="container mt-5 mb-5">
       <div class="row d-flex justify-content-center">

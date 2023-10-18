@@ -1,32 +1,3 @@
-<template>
-    <div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container">
-                <NuxtLink class="navbar-brand" to="">Nuxt Dojo</NuxtLink>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-                        <li class="nav-item">
-                            <NuxtLink class="nav-link active" aria-current="page" to="/">Home</NuxtLink>
-                        </li>
-
-                        <li class="nav-item" v-for="cat in categorys" :key="cat.id">
-                            <NuxtLink class="nav-link" :to="`/category/${ cat }`" >{{ cat }}</NuxtLink>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container">
-            <slot />
-        </div>
-
-    </div>
-</template>
 <script setup>
     useHead({
         link:[
@@ -48,7 +19,44 @@
     })
 
     let catgory_url = 'https://fakestoreapi.com/products/categories'
-
     const { data:categorys } = await useFetch(catgory_url);
 
+    import {useProduct} from '@/store/useProductStore'
+    import { storeToRefs } from 'pinia';
+    const useProductStore = useProduct()
+    const {productCartItems} = storeToRefs(useProductStore)
 </script>
+
+<template>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container">
+                <NuxtLink class="navbar-brand" to="">Nuxt Dojo</NuxtLink>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <NuxtLink class="nav-link active" aria-current="page" to="/">Home</NuxtLink>
+                        </li>
+
+                        <li class="nav-item" v-for="cat in categorys" :key="cat.id">
+                            <NuxtLink class="nav-link" :to="`/category/${ cat }`" >{{ cat }}</NuxtLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <NuxtLink class="nav-link" aria-current="page" to="/cart">Cart <sup>{{ productCartItems.length }}</sup></NuxtLink>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <slot />
+        </div>
+
+    </div>
+</template>

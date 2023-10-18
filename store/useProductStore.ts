@@ -1,40 +1,50 @@
 import { defineStore } from 'pinia';
 
-export const useProduct = defineStore('useProductStore', () => {
-  const productCartItems = ref<any[]>([]);
-  const quantity = ref(0)
+export const useProduct   = defineStore('useProductStore', () => {
+
+  const productCartItems  = ref<any[]>([]);
+  const quantity          = ref(0)
 
   const countProductCartItems = (product: any, quantity: any)=>{
     const findProduct = productCartItems.value.find(p => p?.id === product?.id)
-    const newProduct = {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        quantity: quantity
-    }
+
     if(!findProduct?.id){
-        productCartItems.value.push(newProduct)
+      const new_product = {
+        id : product.id,
+        product_name : product.name,
+        image : product.image,
+        price : product.price,
+        quantity : quantity,
+        total_price : product.price * quantity,
+      }
+
+      productCartItems.value.push(new_product)
     }else {
-        const quantity = findProduct.quantity + 1
-        const newTProduct = {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            quantity
-        }
-        const newUpdateItem = productCartItems.value.filter(p=>  {
-            return {
-                ...p,
-                quantity: quantity + 1
-            }
-        })
-        productCartItems.value = newUpdateItem
+      findProduct.quantity += 1
     }
-    console.log('you click')
+
+    quantity = 0;
+  }
+
+
+  const productcartdataupdate = (product_id: any, now_quantity: any)=>{
+    const findProduct     = productCartItems.value.find(p => p?.id === product_id)
+    findProduct.quantity  = now_quantity
+    findProduct.total_price  = now_quantity * findProduct.price
+  }
+
+  const removeFormCart = (product_id: any)=>{
+    const findProduct     = productCartItems.value.filter(p => p?.id !== product_id);
+    productCartItems.value.push([])
+    productCartItems.value.push(findProduct)
   }
   return {
     productCartItems,
     countProductCartItems,
+    productcartdataupdate,
+    removeFormCart,
     quantity
-  };
+  }
+
+
 });
