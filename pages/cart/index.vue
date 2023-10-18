@@ -6,7 +6,6 @@
     const router = useRouter()
     const useProductStore = useProduct()
     const {productCartItems, quantity} = storeToRefs(useProductStore)
-
 </script>
 
 
@@ -35,7 +34,8 @@
                         </div>
                         <div class="divTableCol"><strong class="label label-success">{{ cart.product_name }}</strong></div>
                         <div class="divTableCol">
-                            <input type="number" class="form-control" :value="cart.quantity" @change="useProductStore.productcartdataupdate(cart.id, $event.target.value)" />
+                            <!-- <input type="number" class="form-control" :value="cart.quantity" @change="useProductStore.productcartdataupdate(cart.id, $event.target.value)" /> -->
+                             <input type="number" class="form-control" v-model="cart.quantity" />
                         </div>
                         <div class="divTableCol"><strong>€{{ cart.price }}</strong></div>
                         <div class="divTableCol"><strong>€{{ cart.total_price }}</strong></div>

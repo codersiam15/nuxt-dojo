@@ -1,32 +1,47 @@
 <script setup>
+import { useProduct } from '@/store/useProductStore';
+import { storeToRefs } from 'pinia';
+const { id } = useRoute().params;
+const router = useRouter();
+const useProductStore = useProduct();
+const { productCartItems, quantity } = storeToRefs(useProductStore);
 
-  import { useProduct } from '@/store/useProductStore'
-  import { storeToRefs } from 'pinia';
-  const { id } = useRoute().params;
-  const router = useRouter()
-  const useProductStore = useProduct()
-  const {productCartItems, quantity} = storeToRefs(useProductStore)
+definePageMeta({
+  layout: 'default',
+});
 
-  definePageMeta({
-    layout: 'default',
-  });
+let url = `https://fakestoreapi.com/products/${id}`;
+const { data: single } = await useFetch(url);
 
-  let url = `https://fakestoreapi.com/products/${id}`;
-  const { data: single } = await useFetch(url);
+useHead({
+  title: () => `${single.value.title} | Dojo`,
+});
 
-  useHead({
-    title: ()=> `${single.value.title} | Dojo`,
-  });
+const backToProductPage = () => {
+  router.back();
+};
 
-  const backToProductPage = ()=>{
-      router.back()
+onUnmounted(() => {
+  quantity.value = 0;
+});
+
+watch(
+  productCartItems,
+  (newValue, oldValue) => {
+    console.log({ newValue });
+    console.log({ oldValue });
+  },
+  {
+    deep: true,
+    immediate: true
   }
+);
+
 
 </script>
 
 <template>
   <div>
-
     <div class="container mt-5 mb-5">
       <div class="row d-flex justify-content-center">
         <div class="col-md-10">
@@ -74,8 +89,13 @@
                   </p>
 
                   <div class="cart mt-4 align-items-center">
-                    <input type="number" v-model="quantity">
-                    <button @click="useProductStore.countProductCartItems(single, quantity)" class="btn btn-danger text-uppercase mr-2 px-4">
+                    <input type="number" v-model="quantity" />
+                    <button
+                      @click="
+                        useProductStore.countProductCartItems(single, quantity)
+                      "
+                      class="btn btn-danger text-uppercase mr-2 px-4"
+                    >
                       Add to cart
                     </button>
                     <i class="fa fa-heart text-muted"></i>
@@ -90,8 +110,6 @@
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 /* .product {
