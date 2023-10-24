@@ -4,9 +4,6 @@ export default defineNuxtConfig({
   experimental: {
     reactivityTransform: true
   },
-  modules: [
-    // ...
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-  ],
+  modules: [// ...
+  '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@nuxtjs/tailwindcss'],
 })
